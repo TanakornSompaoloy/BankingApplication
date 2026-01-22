@@ -1,0 +1,117 @@
+﻿@model List<BillPay>
+
+@{
+    ViewData["Title"] = "Bill Pay";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Bill Pay</h3>
+
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (TempData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["ErrorMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+                    }
+
+                    @if (Model == null || !Model.Any())
+                    {
+                        <div class="text-center mt-4">
+                            <h5>No bills scheduled</h5>
+                            <a asp-action="CreateBillPay" class="btn btn text-dark" style="background-color: #f0d000; border: 1px solid #ddd;">Create New Bill Payment</a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5>Your Scheduled Bills</h5>
+                            <a asp-action="CreateBillPay" class="btn btn text-dark" style="background-color: #f0d000; border: 1px solid #ddd;">Create New Bill Payment</a>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Payee</th>
+                                        <th>@Html.DisplayNameFor(model => model[0].AccountNumber)</th>
+                                        <th>@Html.DisplayNameFor(model => model[0].Amount)</th>
+                                        <th>Schedule Time</th>
+                                        <th>@Html.DisplayNameFor(model => model[0].Period)</th>
+                                        <th>@Html.DisplayNameFor(model => model[0].Status)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var billPay in Model)
+                                    {
+                                        <tr>
+                                            <td>@Html.DisplayFor(m => billPay.BillPayID)</td>
+                                            <td>@Html.DisplayFor(m => billPay.Payee.Name)</td>
+                                            <td>@Html.DisplayFor(m => billPay.AccountNumber)</td>
+                                            <td>@billPay.Amount.ToString("C")</td>
+                                            <td>@billPay.ScheduleTimeUtc.ToLocalTime().ToString("dd/MM/yyyy hh:mm tt")</td>
+                                            <td>@(billPay.Period == PeriodType.M ? "Monthly" : "One-off")</td>
+                                            
+                                            <td>
+                                                @if (billPay.IsBlocked)
+                                                {
+                                                    <span>Blocked</span>
+                                                }
+                                                else
+                                                {
+                                                    @switch (billPay.Status)
+                                                    {
+                                                        case BillPayStatus.P:
+                                                            <span>Pending</span>
+                                                            break;
+                                                        case BillPayStatus.S:
+                                                            <span>Succeeded</span>
+                                                            break;
+                                                        case BillPayStatus.F:
+                                                            <span>Failed</span>
+                                                            break;
+                                                        case BillPayStatus.C:
+                                                            <span>Cancelled</span>
+                                                            break;
+                                                    }
+                                                }
+                                            </td>
+                                            <td>
+                                                @if (billPay.Status == BillPayStatus.P || billPay.Status == BillPayStatus.F || billPay.IsBlocked)
+                                                {
+                                                    <form asp-action="CancelBillPay" method="post" style="display:inline;"
+                                                          onsubmit="return confirm('Do you want to cancel this bill payment?')">
+                                                        <input type="hidden" name="billPayId" value="@billPay.BillPayID" />
+                                                        <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                                                    </form>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

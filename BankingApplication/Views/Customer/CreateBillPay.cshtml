@@ -1,0 +1,88 @@
+﻿@model BankingApplication.ViewModels.CreateBillPayViewModel
+
+@{
+    ViewData["Title"] = "Create Bill Payment";
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-4">Create Bill Payment</h1>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                    <form asp-action="CreateBillPay" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="AccountNumber" class="form-label"></label>
+                                    <select asp-for="AccountNumber" class="form-select">
+                                        <option value="">Choose an account...</option>
+                                        @foreach (var account in Model.Accounts)
+                                        {
+                                            <option value="@account.AccountNumber">
+                                                @account.AccountNumber - @(account.AccountType == AccountType.S ? "Savings" : "Checking") (Balance: @account.Balance.ToString("C"))
+                                            </option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="AccountNumber" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="PayeeId" class="form-label"></label>
+                                    <select asp-for="PayeeId" class="form-select">
+                                        <option value="">Choose a payee...</option>
+                                        @foreach (var payee in Model.Payees)
+                                        {
+                                            <option value="@payee.PayeeId">@payee.Name</option>
+                                        }
+                                    </select>
+                                    <span asp-validation-for="PayeeId" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Amount" class="form-label"></label>
+                                    <input asp-for="Amount" class="form-control"
+                                        data-val="true" data-val-number="The field Amount must be a number."
+                                        data-val-required="The Amount field is required." />
+                                    <span asp-validation-for="Amount" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label asp-for="Period" class="form-label"></label>
+                                    <select asp-for="Period" class="form-select">
+                                        <option value="@PeriodType.O">One-off</option>
+                                        <option value="@PeriodType.M">Monthly</option>
+                                    </select>
+                                    <span asp-validation-for="Period" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ScheduleTime" class="form-label"></label>
+                            <input asp-for="ScheduleTime" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="ScheduleTime" class="text-danger"></span>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary">Create Bill Payment</button>
+                            <a asp-action="BillPay" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

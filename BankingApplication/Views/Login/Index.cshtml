@@ -1,0 +1,51 @@
+﻿@model Login;
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-10 col-lg-8">
+            <div class="text-center">
+                <h1 class="display-4">Good day!</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title text-center mb-4">Please login to your account</h3>
+                    
+                    <form asp-action="Index" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        
+                        <div class="mb-3">
+                            <label asp-for="LoginID" class="form-label">Login ID</label>
+                            <input asp-for="LoginID" class="form-control" />
+                            <span asp-validation-for="LoginID" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" id="password" name="password" class="form-control" />
+                            <span class="text-danger" data-valmsg-for="password" data-valmsg-replace="true"></span>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-lg text-dark" style="background-color: #f0d000; border: 1px solid #ddd;">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

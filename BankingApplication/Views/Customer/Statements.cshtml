@@ -1,0 +1,55 @@
+﻿@using X.PagedList
+@using X.PagedList.Mvc.Core
+@model BankingApplication.ViewModels.StatementViewModel
+
+@{
+    ViewData["Title"] = "My Statements";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">My Statement</h3>
+                    
+                    <form asp-action="Statements" method="get">
+                        <div class="mb-3">
+                            <label for="accountNumber" class="form-label">Select Account</label>
+                            <select asp-for="SelectedAccountNumber" class="form-select" onchange="this.form.submit()">
+                                <option value="">Choose an account...</option>
+                                @foreach (var account in Model.Accounts)
+                                {
+                                <option value="@account.AccountNumber" selected="@(Model.SelectedAccountNumber == account.AccountNumber)">
+                                    @account.AccountNumber - @(account.AccountType == AccountType.S ? "Savings" : "Checking") (Balance: @account.Balance.ToString("C"))
+                                </option>
+                                }
+                            </select>
+                        </div>
+                    </form>
+
+                    @if (Model.SelectedAccount != null && Model.PagedTransactions.Any())
+                    {
+                    <partial name="_Transactions" model="Model" />
+                    }
+                    else if (Model.SelectedAccount != null && !Model.PagedTransactions.Any())
+                    {
+                    <div class="alert alert-info">
+                        No transactions found.
+                    </div>
+                    }
+                </div>
+            </div>
+        </div>
+        @if (Model.SelectedAccount != null && Model.PagedTransactions.Any())
+        {
+            <div class="d-flex justify-content-center mt-4">
+                @Html.PagedListPager(Model.PagedTransactions, page => Url.Action("Statements", new { selectedAccountNumber = Model.SelectedAccountNumber, page }),
+                new PagedListRenderOptions {
+                    LiElementClasses = ["page-item"],
+                    PageClasses = ["page-link"]
+                })
+            </div>
+        }
+    </div>
+</div>

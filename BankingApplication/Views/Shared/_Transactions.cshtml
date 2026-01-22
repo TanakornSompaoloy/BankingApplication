@@ -1,0 +1,64 @@
+﻿@model BankingApplication.ViewModels.StatementViewModel
+
+<hr>
+<h4 class="mb-3">Transaction History</h4>
+
+<P class="mb-4">Account: @Model.SelectedAccount.AccountNumber - @(Model.SelectedAccount.AccountType == AccountType.S ? "Savings" : "Checking")</P>
+<p class="mb-4">Current Balance: <strong>@Model.SelectedAccount.Balance.ToString("C")</strong></p>
+<p class="mb-4">Available Balance: <strong>@Model.AvailableBalance.ToString("C")</strong></p>
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="table-dark">
+            <tr>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().TransactionID)</th>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().TransactionType)</th>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().AccountNumber)</th>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().DestinationAccountNumber)</th>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().Amount)</th>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().TransactionTimeUtc)</th>
+                <th>@Html.DisplayNameFor(m => Model.SelectedAccount.Transactions.First().Comment)</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var transaction in Model.PagedTransactions)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => transaction.TransactionID)</td>
+                    <td>
+                        @switch (transaction.TransactionType)
+                        {
+                            case TransactionType.D:
+                                <span>Deposit</span>
+                                break;
+                            case TransactionType.W:
+                                <span>Withdrawal</span>
+                                break;
+                            case TransactionType.T:
+                                <span>Transfer</span>
+                                break;
+                            case TransactionType.S:
+                                <span>Service Charge</span>
+                                break;
+                            case TransactionType.B:
+                                <span>Bill Pay</span>
+                                break;
+                        }
+                    </td>
+                    <td>@Html.DisplayFor(m => transaction.AccountNumber)</td>
+                    <td>@(transaction.DestinationAccountNumber?.ToString() ?? "-")</td>
+                    <td>@Html.DisplayFor(m => transaction.Amount)</td>
+                    <td>@transaction.TransactionTimeUtc.ToLocalTime().ToString("dd/MM/yyyy HH:mm tt")</td>
+                    <td>@(transaction.Comment?.ToString() ?? "-")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="d-grid">
+    <a asp-action="ExportTransactions" asp-route-accountNumber="@Model.SelectedAccountNumber"
+       target="_blank" 
+       class="btn btn text-dark" style="background-color: #f0d000; border: 1px solid #ddd;">
+       Export transaction history</a>
+</div>

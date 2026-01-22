@@ -1,0 +1,129 @@
+﻿@model Customer;
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="text-center mb-4">
+    <h1 class="display-4">Edit Profile</h1>
+</div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="EditProfile" method="post">
+                    <input type="hidden" asp-for="CustomerID" />
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label"></label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="TFN" class="form-label"></label>
+                        <input asp-for="TFN" class="form-control" maxlength="11" placeholder="123 456 789" />
+                        <span asp-validation-for="TFN" class="text-danger"></span>
+                        <small class="form-text text-muted">Format: XXX XXX XXX</small>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label"></label>
+                        <input asp-for="Address" class="form-control" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="City" class="form-label"></label>
+                        <input asp-for="City" class="form-control" />
+                        <span asp-validation-for="City" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="State" class="form-label"></label>
+                        <select asp-for="State" class="form-select">
+                            <option value="">Select a state</option>
+                            <option value="NSW">New South Wales</option>
+                            <option value="VIC">Victoria</option>
+                            <option value="QLD">Queensland</option>
+                            <option value="WA">Western Australia</option>
+                            <option value="SA">South Australia</option>
+                            <option value="TAS">Tasmania</option>
+                            <option value="ACT">Australian Capital Territory</option>
+                            <option value="NT">Northern Territory</option>
+                        </select>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Postcode" class="form-label"></label>
+                        <input asp-for="Postcode" class="form-control" />
+                        <span asp-validation-for="Postcode" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Mobile" class="form-label"></label>
+                        <input asp-for="Mobile" class="form-control" maxlength="12" placeholder="0412 345 678" />
+                        <span asp-validation-for="Mobile" class="text-danger"></span>
+                        <small class="form-text text-muted">Format: 04XX XXX XXX</small>
+                    </div>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <a asp-action="Profile" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const tfnInput = document.querySelector('input[name="TFN"]');
+            const mobileInput = document.querySelector('input[name="Mobile"]');
+
+            // TFN format: XXX XXX XXX
+            tfnInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = '';
+
+                // Add spaces
+                for (let i = 0; i < value.length; i++) {
+                    if (i > 0 && i % 3 === 0) {
+                        formattedValue += ' ';
+                    }
+                    formattedValue += value[i];
+                }
+
+                e.target.value = formattedValue;
+            });
+
+            // Mobile format: 04XX XXX XXX
+            mobileInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = '';
+
+                for (let i = 0; i < value.length; i++) {
+                    // Add space
+                    if (i === 4 || i === 7) {
+                        formattedValue += ' ';
+                    }
+                    formattedValue += value[i];
+                }
+
+                e.target.value = formattedValue;
+            });
+        });
+    </script>
+}

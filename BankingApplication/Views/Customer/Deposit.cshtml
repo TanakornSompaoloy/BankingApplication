@@ -1,0 +1,53 @@
+@model List<Account>
+
+@{
+    ViewData["Title"] = "Deposit";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Make a Deposit</h3>
+                    
+                    <form asp-action="Deposit" method="post">
+                        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+                        
+                        <div class="mb-3">
+                            <label for="accountNumber" class="form-label">Select Account</label>
+                            <select name="accountNumber" class="form-select" required>
+                                <option value="">Choose an account...</option>
+                                @foreach (var account in Model)
+                                {
+                                    <option value="@account.AccountNumber">
+                                        @account.AccountNumber - @(account.AccountType == AccountType.S ? "Savings" : "Checking") (Balance: @account.Balance.ToString("C"))
+                                    </option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="amount" class="form-label">Amount</label>
+                            <input id="amount" name="amount" class="form-control" value="@ViewBag.Amount?.ToString("0.00")"
+                                data-val="true" data-val-number="The field Amount must be a number."
+                                data-val-required="The Amount field is required." />
+                            @Html.ValidationMessage("Amount", new { @class = "text-danger" })
+
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="comment" class="form-label">Comment (Optional)</label>
+                            <input type="text" name="comment" maxlength="30" class="form-control" placeholder="Enter a comment (max 30 characters)" />
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn text-dark" style="background-color: #f0d000; border: 1px solid #ddd;">Continue</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
