@@ -5,7 +5,7 @@ using BankingApplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList.Extensions;
 
-namespace McbaApplication.Controllers;
+namespace BankingApplication.Controllers;
 
 [AuthorizeCustomer]
 public class CustomerController : Controller

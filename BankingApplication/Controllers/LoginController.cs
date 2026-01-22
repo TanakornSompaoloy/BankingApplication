@@ -2,7 +2,7 @@
 using BankingApplication.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace McbaApplication.Controllers;
+namespace BankingApplication.Controllers;
 
 public class LoginController : Controller
 {
