@@ -5,6 +5,8 @@ using BankingApplication.Services;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Infrastructure;
 
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure QuestPDF license for educational use
@@ -15,8 +17,10 @@ builder.Services.AddControllersWithViews();
 
 // Add services to the container.
 builder.Services.AddDbContext<McbaContext>(options =>
-    options.UseSqlServer(
-        builder.Configuration.GetConnectionString(nameof(McbaContext))));
+    //options.UseSqlServer(
+    //    builder.Configuration.GetConnectionString(nameof(McbaContext))));
+    //options.UseNpgsql(builder.Configuration.GetConnectionString(nameof(McbaContext))));
+    options.UseNpgsql(builder.Configuration["ConnectionStrings:McbaContext"]));
 
 // Register business logic services
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
