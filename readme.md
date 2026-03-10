@@ -42,10 +42,6 @@ This project was built as part of a Master of Information Technology program at 
 
 
 
-| Layer | Technology |
-
-|---|---|
-
 | \*\*Framework\*\* | ASP.NET Core (.NET 10) |
 
 | \*\*Language\*\* | C# |
