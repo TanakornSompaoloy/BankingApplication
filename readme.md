@@ -20,7 +20,7 @@ This project was built as part of a Master of Information Technology program at 
 
 ## 🛠️ Tech Stack
 
-| **Framework** | ASP.NET Core Web API (.NET 8) |
+| **Framework** | ASP.NET Core Web API (.NET 10) |
 | **Language** | C# |
 | **ORM** | Entity Framework Core |
 | **Database** | PostgreSQL (hosted on [Neon](https://neon.tech)) |
