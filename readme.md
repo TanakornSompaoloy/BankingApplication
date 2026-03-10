@@ -7,7 +7,7 @@ A RESTful Web API for managing banking operations including accounts, transactio
 ## 🌐 Live Demo
 
 > **WEB Base URL:** [`https://bankingapp-bqgvdvfvfse6eyd0.australiaeast-01.azurewebsites.net/`](https://bankingapp-bqgvdvfvfse6eyd0.australiaeast-01.azurewebsites.net/)
-> **NOTE:** LoginID: 11223344 Password: 123abc
+> **NOTE:** LoginID: 11223344 Password: abc123
 
 ---
 
